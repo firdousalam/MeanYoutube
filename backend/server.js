@@ -20,7 +20,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send('Hello World!')
   })
-// Requests will never reach this route
+// List APIs
 app.get('/lists', function (req, res) {
     List.find({}).then((list)=>{
         res.send(list);
@@ -62,6 +62,48 @@ app.delete('/deleteList/:listId', function (req, res) {
         res.send(err);
     })
 });
+//////task API endpoint
+app.get('/list/:listId/tasks', function (req, res) {
+    Task.find({"_listId":req.params.listId}).then((task)=>{
+        res.send(task);
+    }).catch((err)=>{
+        res.send(err);
+    })
+});
+app.get('/list/:listId/tasks/:taskId', function (req, res) {
+    Task.find({"_id":req.params.taskId,"_listId":req.params.listId}).then((task)=>{
+        res.send(task);
+    }).catch((err)=>{
+        res.send(err);
+    })
+});
+app.post('/createTask', (req, res) => {
+    (new Task({'title' : req.body.title,"_listId":req.body._listId}))
+    .save()
+    .then((task)=>{
+        res.send(task);
+    }).catch((err)=>{
+        res.send(err);
+    })
+  })
+
+app.patch('/list/:listId/tasks/:taskId', function (req, res) {
+    Task.findOneAndUpdate({"_id":req.params.taskId,"_listId" : req.params.taskId},{$set : req.body})
+    .then((task)=>{
+        res.send(task);
+    }).catch((err)=>{
+        res.send(err);
+    })
+});
+app.delete('/deleteTask/:taskId', function (req, res) {
+    Task.deleteOne({"_id":req.params.taskId})
+    .then((task)=>{
+        res.send(task);
+    }).catch((err)=>{
+        res.send(err);
+    })
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
