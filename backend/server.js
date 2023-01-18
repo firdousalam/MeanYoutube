@@ -1,5 +1,6 @@
 const express = require('express');
-const mongoose = require("./config/momgoose")
+const mongoose = require("./config/momgoose");
+const router = require("./router/router")
 const app = express()
 const port = 3000
 
@@ -16,7 +17,7 @@ app.use(function (req, res, next) {
 app.use(express.json());
 
 
-    
+app.use(router);
 app.get('/', (req, res) => {
     res.send('Hello World!')
   })
