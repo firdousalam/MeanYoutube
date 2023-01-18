@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
+require('dotenv').config()
 mongoose.Promise = global.Promise;
-const uri = "mongodb+srv://MeanYoutube:MeanYoutube1234@cluster0.wl3vp.mongodb.net/MeanYoutube?retryWrites=true&w=majority";
+const uri = process.env.DBCONFIG;
 mongoose.set('strictQuery', false);
 
 mongoose.connect(uri,{ useNewUrlParser: true, useUnifiedTopology: true}).then((conn)=> {console.log("connected")})
